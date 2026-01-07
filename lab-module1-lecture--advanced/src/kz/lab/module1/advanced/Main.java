@@ -12,8 +12,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        //taskImmutable();
-        //taskRecord();
+        taskImmutable();
+        taskRecord();
         taskLambda();
     }
 
@@ -24,16 +24,16 @@ public class Main {
 
 
         // не должно работать - после исправления закомментировать
-        Student student = new Student();
+//        Student student = new Student();
 
         // не должно работать - после исправления закомментировать
-        student.setName("Ivan");
+//        student.setName("Ivan");
 
         // должно работать - после исправления раскомментировать
-        //Student student1 = new Student(1, "Ivan", "70022244505");
+        Student student1 = new Student(1, "Ivan", "70022244505");
 
         // должно выводить в читаемом виде
-        //System.out.println(student1.toString());
+        System.out.println(student1.toString());
 
         // не должно работать
         // наследование запрещено чтобы избежать проблем с equals()
@@ -67,10 +67,10 @@ public class Main {
         //  поля должны быть immutable
 
         Set<String> items = new HashSet<>(Set.of("a", "b", "c"));
-        Order order = new Order(100, -30, LocalDateTime.now().plusDays(10), items); // можно ввести некорректные данные
+        Order order = new Order(100, 30, LocalDateTime.now().minusDays(10), items); // можно ввести некорректные данные
         System.out.println(order);
-        order.items().add("d"); // можно изменить поле рекорда
-        System.out.println(order);
+//        order.items().add("d"); // можно изменить поле рекорда
+//        System.out.println(order);
     }
 
     private static void taskLambda() {
@@ -81,9 +81,9 @@ public class Main {
                 new Customer("Bob", "bob@gmail.com"),
                 new Customer("Alice", "alice@gmail.com")
         );
-
+        EmailSender sender = email ->  System.out.println(email);
         // todo: реализовать отправку имейлов вставив имена в заголовок
-        //sendEmails(...);
+        sendEmails(title, content, customers, sender);
 
         // Вывод в консоль
         // Email[to=bob@gmail.com, title=hi Bob, body=happy new year!]
@@ -92,8 +92,8 @@ public class Main {
     }
 
     public static void sendEmails(String title, String content, List<Customer> customers, EmailSender emailSender) {
-//        customers.stream()
-//                .map(...)
-//                .forEach(...);
+        customers.stream()
+                .map(c ->  new Email(c.email(), title + c.name(), content))
+                .forEach(emailSender::send);
     }
 }
